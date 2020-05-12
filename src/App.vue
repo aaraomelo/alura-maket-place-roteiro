@@ -1,60 +1,51 @@
 <template>
-  <v-app>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-    >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
-    </v-app-bar>
-
-    <v-content>
-      <HelloWorld/>
-    </v-content>
-  </v-app>
+  <div id="app">
+    <Default>
+      <router-view
+        @cadastrar-produto="cadastrarProduto"
+        @cadastrar-usuario="cadastrarUsuario"
+        @usuario-autenticado="autenticarUsuario"
+        v-bind="minhasPropriedades"
+      ></router-view>
+    </Default>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
+import Default from "./layout/Default";
 
 export default {
-  name: 'App',
-
   components: {
-    HelloWorld,
+    Default
   },
-
-  data: () => ({
-    //
-  }),
+  data() {
+    return {
+      autenticacao: false,
+      produtos: [],
+      usuarios: []
+    };
+  },
+  methods: {
+    cadastrarProduto(produto) {
+      this.produtos.push(produto);
+    },
+    cadastrarUsuario(usuario) {
+      this.usuarios.push(usuario);
+    },
+    autenticarUsuario() {
+      this.autenticacao = true;
+    }
+  },
+  computed: {
+    minhasPropriedades() {
+      if (this.$route.name === "Comprar") {
+        return { produtos: this.produtos };
+      }
+      if (this.$route.name === "Login") {
+        return { usuarios: this.usuarios };
+      }
+      return {};
+    }
+  }
 };
 </script>
